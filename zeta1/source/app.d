@@ -1,12 +1,13 @@
 import std.stdio;
+import std.complex;
 
 void main()
 {
-    ireal 虚実 = 1.0i;
+    auto 虚実 = complex(0.0L, 1.0L);
     writeln(虚実);
-    writeln(虚実^^2.0);
+    writeln(虚実^^2.0L);
 
-    creal 複実 = 1.0 + 虚実;
+    auto 複実 = 1.0L + 虚実;
     writeln(複実);
-    writeln(複実^^2.0);
+    writeln(複実^^2.0L);
 }
