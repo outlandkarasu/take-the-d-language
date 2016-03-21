@@ -1,9 +1,10 @@
 module zeta;
 
-import std.algorithm : min;
+import std.algorithm : min, map, sum;
 import std.bigint : BigInt;
 import std.complex : complex, Complex, abs;
 import std.functional : memoize;
+import std.range : iota;
 import std.string : format;
 
 /// BigIntの定数1
@@ -72,22 +73,10 @@ unittest {
  *      ゼータ関数の値
  */
 Complex!R ζ(R)(Complex!R s) @safe {
-    alias typeof(s) Complex;
-
-    auto outerSum = Complex(0);
-
-    // とりあえず255回計算してみる。
-    foreach(m; 1 .. 255 + 1) {
-        auto innerSum = Complex(0);
-
-        // 1からmまで
-        foreach(j; 1 .. m + 1) {
-            innerSum += (-1.0L) ^^ (j - 1) * binom(m - 1, j - 1).toLong() * j ^^ (-s);
-        }
-        outerSum += 2.0L ^^ (-m) * innerSum;
-    }
-
-    return 1.0L / (1.0L - 2.0L ^^ (1.0L - s)) * outerSum;
+    return 1.0L / (1.0L - 2.0L^^(1.0L - s))
+        * Σ(1, 255, (int m)
+            => 2.0L^^(-m) * Σ(1, m, (int j)
+                => (-1.0L)^^(j - 1) * binom(m - 1, j - 1).toLong() * j^^(-s)));
 }
 
 // 非自明な零点の虚数部の値
@@ -105,5 +94,24 @@ unittest {
         immutable z = ζ(complex(0.5L, t[0]));
         assert(abs(z) <= t[1], format("abs(z) == %aでした……。", abs(z)));
     }   
+}
+
+/**
+ *  Params:
+ *      T = 添字の型
+ *      F = 実行する関数の型。添字が渡される。
+ *      begin = 初期値
+ *      end = 終端(この値まで含んで実行される)
+ *      f = 実行される関数
+ *  Retuns:
+ *      fの結果の総和。型は総和の型。
+ */
+auto Σ(T, F)(T begin, T end, F f) @safe {
+    return iota(begin, end + 1).map!(f).sum;
+}
+
+unittest {
+    assert(Σ(1, 10, (int x) => x) == 55);
+    assert(Σ(1, 100, (int x) => x) == 5050);
 }
 
