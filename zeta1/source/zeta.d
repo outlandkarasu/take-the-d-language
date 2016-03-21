@@ -2,6 +2,7 @@ module zeta;
 
 import std.algorithm : min;
 import std.bigint : BigInt;
+import std.functional : memoize;
 
 /// BigIntの定数1
 private immutable BIG_INT_ONE = BigInt(1);
@@ -19,13 +20,15 @@ in {
     assert(0 <= k);
     assert(k <= n);
 } body {
-    k = min(n, n - k);
+    return memoize!(delegate BigInt(int l, int m) @safe {
+        m = min(l, l - m);
 
-    if(k == 0) {
-        return BIG_INT_ONE;
-    }
+        if(m == 0) {
+            return BIG_INT_ONE;
+        }
 
-    return binom(n - 1, k - 1) * n / k;
+        return binom(l - 1, m - 1) * l / m;
+    })(n, k);
 }
 
 /// これがユニットテスト
