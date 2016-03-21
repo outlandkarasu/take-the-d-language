@@ -1,13 +1,10 @@
 import std.stdio;
-import std.complex;
+import std.complex : abs, complex;
 
-void main()
-{
-    auto 虚実 = complex(0.0L, 1.0L);
-    writeln(虚実);
-    writeln(虚実^^2.0L);
+import zeta : ZEROS, ζ;
 
-    auto 複実 = 1.0L + 虚実;
-    writeln(複実);
-    writeln(複実^^2.0L);
+void main() {
+    foreach(t; ZEROS) {
+        writefln("%1$g %1$a", abs(ζ(complex(0.5L, t[0]))));
+    }
 }
