@@ -1,6 +1,8 @@
 import std.stdio;
 
+import zeta;
+
 void main()
 {
-	writeln("Edit source/app.d to start your project.");
+	writeln(testZeta());
 }
