@@ -1,0 +1,3 @@
+[submodule "karasutk"]
+	path = karasutk
+	url = git@github.com:outlandkarasu/karasutk.git

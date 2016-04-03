@@ -1,0 +1,8 @@
+name "zeta2"
+description "A minimal D application."
+copyright "Copyright © 2016, akira"
+authors "akira"
+license "BSL-1.0"
+
+dependency "karasutk" path="../../karasutk"
+stringImportPaths "source/"
